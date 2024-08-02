@@ -1,7 +1,15 @@
+- name: Run ps1 script in privileged mode
+  hosts: windows
+  become_method: runas
 
-- name: PowerShell Directory Test and File Create
-  win_shell: |
-    $value = Test-Path -Path C:\temp
-    if ($value) {
-        New-Item C:\temp\test.txt -ItemType File
-    }
+  vars:
+    ansible_become_password: G32SU9ESwRqTI4FX1f3i
+
+  tasks:
+    - win_shell: |
+        $value = Test-Path -Path C:\temp
+        if ($value) {
+            New-Item C:\temp\test.txt -ItemType File
+        }
+      become: yes
+      become_user: vmh\Administrator
