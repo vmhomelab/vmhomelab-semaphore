@@ -2,5 +2,5 @@
 - hosts: windows
   tasks:
 
-  - name: Single line PowerShell
-    ansible.windows.win_powershell: Set-Content -Path C:\temp\test.txt -Value 'Hello there. '
+  - name: Run a script
+    win_shell: C:\temp\test.ps1
