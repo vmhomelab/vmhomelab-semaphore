@@ -1,15 +1,6 @@
-- name: Run ps1 script in privileged mode
-  hosts: windows
-  become_method: runas
-
-  vars:
-    ansible_become_password: G32SU9ESwRqTI4FX1f3i
-
+---
+- hosts: windows
   tasks:
-    - win_shell: |
-        $value = Test-Path -Path C:\temp
-        if ($value) {
-            New-Item C:\temp\test.txt -ItemType File
-        }
-      become: yes
-      become_user: vmh\Administrator
+
+  - name: Single line PowerShell
+    win_shell: Set-Content -Path C:\temp\test.txt -Value 'Hello there. '
