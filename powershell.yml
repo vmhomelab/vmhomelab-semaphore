@@ -3,4 +3,4 @@
   tasks:
 
   - name: Single line PowerShell
-    ansible.windows.win_shell: Set-Content -Path C:\temp\test.txt -Value 'Hello there. '
+    ansible.windows.win_powershell: Set-Content -Path C:\temp\test.txt -Value 'Hello there. '
