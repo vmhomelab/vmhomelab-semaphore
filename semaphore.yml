@@ -1,0 +1,17 @@
+version: v1.0
+name: Update Ubuntu Packages
+
+agent:
+  machine:
+    type: e1-standard-2  # Adjust machine type as per your requirements
+
+blocks:
+  - name: Update Ubuntu
+    task:
+      secrets:
+        - name: vmh-ubuntu01-srv  # Name of the secret added in Semaphore
+      jobs:
+        - name: Update Ubuntu Packages
+          commands:
+            - export ANSIBLE_HOST_KEY_CHECKING=False  # Disable host key checking
+            - ansible-playbook -i inventory_file update_ubuntu.yml
