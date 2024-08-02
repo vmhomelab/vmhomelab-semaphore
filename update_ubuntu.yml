@@ -1,0 +1,22 @@
+---
+- name: Update Ubuntu Packages
+  hosts: test  # Replace with your Ubuntu host or group name
+
+  tasks:
+    - name: Update apt package cache
+      become: yes  # Run tasks with sudo (root) privileges
+      apt:
+        update_cache: yes
+
+    - name: Upgrade all packages
+      become: yes
+      apt:
+        upgrade: yes
+        autoremove: yes  # Remove unused packages
+        autoclean: yes   # Clean up apt cache
+
+    - name: Reboot if required after upgrade
+      become: yes
+      reboot:
+        reboot_timeout: 300  # Wait up to 5 minutes for the system to reboot if needed
+        connect_timeout: 60   # Connection timeout for reboot task
