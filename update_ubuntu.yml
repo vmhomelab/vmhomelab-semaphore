@@ -3,9 +3,6 @@
   hosts: test  # Replace with your Ubuntu host or group name
 
   tasks:
-    - name: Login via SSH
-      secrets:
-        - name: vmh-ubuntu-srv
     - name: Update apt package cache
       become: yes  # Run tasks with sudo (root) privileges
       apt:
