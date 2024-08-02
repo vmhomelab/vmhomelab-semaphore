@@ -1,0 +1,7 @@
+
+- name: PowerShell Directory Test and File Create
+  win_shell: |
+    $value = Test-Path -Path C:\temp
+    if ($value) {
+        New-Item C:\temp\test.txt -ItemType File
+    }
