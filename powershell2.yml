@@ -1,8 +1,2 @@
----
-- hosts: windows
-  tasks:
-
-- name: Run basic PowerShell script
-  win_shell:
-    script: |
-      echo "Hello World"
+- name: Run a script
+    win_shell: C:\temp\test.ps1
