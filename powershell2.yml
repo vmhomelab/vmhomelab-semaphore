@@ -3,6 +3,6 @@
   tasks:
 
 - name: Run basic PowerShell script
-  ansible.windows.win_powershell:
+  win_shell:
     script: |
       echo "Hello World"
