@@ -1,6 +1,9 @@
-- name: Example from an Ansible Playbook
-  ansible.windows.win_ping:
+- hosts: windows
+  tasks:
 
-- name: Induce an exception to see what happens
-  ansible.windows.win_ping:
-    data: crash
+  - name: Example from an Ansible Playbook
+    ansible.windows.win_ping:
+
+  - name: Induce an exception to see what happens
+    ansible.windows.win_ping:
+      data: crash
