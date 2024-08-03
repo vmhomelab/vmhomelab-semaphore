@@ -1,0 +1,1 @@
+Set-Content -Path C:\temp\test.txt -Value 'Hello there. '
