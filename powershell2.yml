@@ -1,2 +1,2 @@
-- name: Run a script
-  win_shell: C:\temp\test.ps1
+- name: Example from an Ansible Playbook
+  ansible.windows.win_ping:
