@@ -1,5 +1,5 @@
 - name: Reboot NSP-DC01-SRV
-  hosts: windows
+  hosts: Hosts
   remote_user: administrator
   
   tasks:
