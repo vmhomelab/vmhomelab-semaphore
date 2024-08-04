@@ -1,4 +1,4 @@
-- hosts: windows_server
+- hosts: windows
   tasks:
 
   - name: Example from an Ansible Playbook
