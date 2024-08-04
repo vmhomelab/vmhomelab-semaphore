@@ -1,12 +1,17 @@
 ---
-# This playbook runs a basic DF command.
-
 - hosts: windows
-  #remote_user: root
+  become: false
+  gather_facts: false
 
   tasks:
-  - name: Run a PowerShell script with -NoProfile
-  ansible.windows.win_shell: C:\somescript.ps1
-  args:
-    no_profile: true
+
+  - name: Extract PS output.
+    shell: 
+      cmd: "C:\somescript.ps1"
+    register: pmon
+
+  - name: Display PS output.
+    debug:
+      msg: "{{ pmon.stdout_lines }}"
+
 
