@@ -1,7 +1,16 @@
-- name: Install all critical and security updates
-  win_updates:
-    category_names:
-    - CriticalUpdates
-    - SecurityUpdates
-    state: installed
-  register: update_result
+---
+- hosts: windows_server
+  become: false
+  gather_facts: false
+  vars:
+    ansible_remote_tmp: C:/Windows/Temp/ansible
+
+  tasks:
+
+  - name: Install all critical and security updates
+    win_updates:
+      category_names:
+      - CriticalUpdates
+      - SecurityUpdates
+      state: installed
+    register: update_result
