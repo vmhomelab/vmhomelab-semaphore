@@ -2,6 +2,8 @@
 - hosts: windows
   become: false
   gather_facts: false
+  vars:
+    ansible_remote_tmp: C:/Windows/Temp/ansible
 
   tasks:
 
