@@ -12,5 +12,5 @@
       category_names:
       - CriticalUpdates
       - SecurityUpdates
-      state: installed
+      state: present
     register: update_result
