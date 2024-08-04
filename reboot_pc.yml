@@ -1,0 +1,7 @@
+- name: Reboot NSP-DC01-SRV
+  hosts: windows
+  remote_user: administrator
+  
+  tasks:
+  - name: Reboot
+    ansible.windows.win_reboot:
