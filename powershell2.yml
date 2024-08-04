@@ -1,4 +1,4 @@
-- name: Run basic PowerShell script
-  ansible.windows.win_powershell:
-    script: |
-      echo "Hello World"
+- name: Run a PowerShell script with -NoProfile
+  ansible.windows.win_shell: C:\somescript.ps1
+  args:
+    no_profile: true
