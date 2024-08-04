@@ -9,7 +9,7 @@
 
   - name: Extract PS output.
     shell: 
-      cmd: "C:\\somescript.ps1"
+      cmd: "C:\\test.ps1"
     register: pmon
 
   - name: Display PS output.
