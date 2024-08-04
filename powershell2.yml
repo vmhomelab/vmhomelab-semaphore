@@ -1,2 +1,4 @@
-- name: Example from an Ansible Playbook
-  ansible.windows.win_ping:
+- name: Run basic PowerShell script
+  ansible.windows.win_powershell:
+    script: |
+      echo "Hello World"
