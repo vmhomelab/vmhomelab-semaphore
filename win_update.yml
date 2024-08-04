@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
+- hosts: windows_server
   become: false
   gather_facts: false
 
