@@ -1,13 +1,14 @@
 - name: Default Setup
   hosts: windows
-
+  
   tasks:
-   - name: Install Windows Updates
-     ansible.windows.win_updates:
-      server_selection: windows_update
-      reboot: yes
-      reboot_timeout: 600
-      state: installed
-      reject_list:
-      - KB5034439
-      category_names: '*'
+    - name: Install all security, critical, and rollup updates without a scheduled task
+      ansible.windows.win_updates:
+        reboot: yes
+        reboot_timeout: 600
+        reject_list:
+          - KB5034439
+        category_names: '*'
+      become: true
+      become_method: runas
+      become_user: SYSTEM
