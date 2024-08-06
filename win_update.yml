@@ -1,16 +1,13 @@
----
-- hosts: windows
-  become: false
-  gather_facts: false
-  vars:
-    ansible_remote_tmp: C:/Windows/Temp/ansible
+- name: Default Setup
+  hosts: windows
 
   tasks:
-
-  - name: Install all critical and security updates
-    win_updates:
-      category_names:
-      - CriticalUpdates
-      - SecurityUpdates
+   - name: Install Windows Updates
+     ansible.windows.win_updates:
+      server_selection: windows_update
+      reboot: yes
+      reboot_timeout: 600
       state: installed
-    register: update_result
+      reject_list:
+      - KB5034439
+      category_names: '*'
