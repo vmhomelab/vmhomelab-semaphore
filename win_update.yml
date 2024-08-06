@@ -1,5 +1,5 @@
 ---
-- hosts: windows_server
+- hosts: tools
   become: false
   gather_facts: false
   vars:
