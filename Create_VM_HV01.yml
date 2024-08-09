@@ -1,0 +1,33 @@
+- name: Create Virtual Machine
+  hosts: hv01
+
+  tasks:
+    - name: Create Virtual Machine
+      ansible.windows.win_shell: |
+        $Name="{{ VM_Name }}"
+        $VHDX={{ VM_VHDX_Size }}
+        $RAM={{ VM_RAM }}
+        $CPU="{{ VM_CPU }}"
+        $NWAdapter="{{ VM_Switch }}"
+        $vLAN="{{ VM_vLANid }}"
+        $Path="D:\Virtual Hard Disk\{{ VM_Name }}\System.vhdx"
+        $ISOPath="{{ VM_ISO }}"
+        
+        # Creating VM
+        New-VM -Name $Name -Path 'D:\Configuration Files\Virtual Machines' -MemoryStartupBytes $RAM -NewVHDPath $Path -NewVHDSizeBytes $VHDX -Generation 2
+        
+        # Adding DVD drive and connecting ISO
+        Add-VMDvdDrive -VMName $Name -Path $ISOPath
+        
+        # Setting CPU Count
+        Set-VMProcessor $Name -Count $CPU
+        
+        # Configuring Network Adapter and VLAN
+        $vmAdapter = Get-VM $Name | Get-VMNetworkAdapter
+        $vmAdapter | Connect-VMNetworkAdapter -SwitchName $NWAdapter
+        $vmAdapter | Set-VMNetworkAdapterVlan -VlanId $vLAN -Access
+
+    - name: Set boot order
+      ansible.windows.win_shell: |
+        $Name="{{ VM_Name }}"
+        Set-VMFirmware $Name -BootOrder $(Get-VMDvdDrive -VMName $Name), $(Get-VMHardDiskDrive -VMName $Name), $(Get-VMNetworkAdapter -VMName $Name)
