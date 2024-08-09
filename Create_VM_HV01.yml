@@ -31,3 +31,8 @@
       ansible.windows.win_shell: |
         $Name="{{ VM_Name }}"
         Set-VMFirmware $Name -BootOrder $(Get-VMDvdDrive -VMName $Name), $(Get-VMHardDiskDrive -VMName $Name), $(Get-VMNetworkAdapter -VMName $Name)
+
+    - name: Start created VM
+      ansible.windows.win_shell: |
+        $Name="{{ VM_Name }}"
+        Start-VM -Name $Name
