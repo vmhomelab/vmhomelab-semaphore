@@ -3,7 +3,7 @@
 
   tasks:
     - name: Create Virutal Machine
-      ansible.windows.win_powershell:
+      ansible.windows.win_shell:
         script: |
           $Name="{{ VM_Name }}" 
           $VHDX={{ VM_VHDX_Size }}
