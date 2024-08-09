@@ -1,0 +1,9 @@
+- name: Create_Snapshots
+  hosts: VMs
+
+  tasks:
+   - name: Create Snapshots
+     ansible.windows.win_powershell:
+      script: |
+       $VMs=Get-VM
+       $VMs | ForEach-Object -Process {if ($_.State -eq "Running") {Checkpoint-VM -Name $_.Name -SnapshotName "Ansible_Snapshot"}}
