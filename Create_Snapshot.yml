@@ -1,5 +1,5 @@
 - name: Create_Snapshots
-  hosts: hv01
+  hosts: hosts
 
   tasks:
    - name: Create Snapshots
