@@ -4,23 +4,23 @@
   tasks:
     - name: Create Virutal Machine
       ansible.windows.win_powershell:
-      script: |
-       $Name="{{ VM_Name }}" 
-       $VHDX={{ VM_VHDX_Size }}
-       $RAM={{ VM_RAM }}
-       $CPU="{{ VM_CPU }}"
-       $NWAdapter="{{ VM_Switch }}"
-       $vLAN="{{ VM_vLANid }}"
-       $Path="{{ VM_VHDX_Disk }}:\Hyper-V\{{ VM_Name }}\Virtual Hard Disks\System.vhdx"
-       $ISOPath="{{ VM_ISO }}"
-       New-VM -Name $Name -Path 'C:\Hyper-V\' -MemoryStartupBytes $RAM -NewVHDPath $Path -NewVHDSizeBytes $VHDX -Generation 2
-       Add-VMDvdDrive -VMName $Name -Path $ISOPath
-       Set-VMProcessor $Name -Count $CPU
-       Get-VM $Name | Get-VMNetworkAdapter | Connect-VMNetworkAdapter -SwitchName $NWAdapter
-       Get-VM $Name | Get-VMNetworkAdapter | Set-VMNetworkAdapterVlan  -VlanId $vLAN -Access
+        script: |
+        $Name="{{ VM_Name }}" 
+        $VHDX={{ VM_VHDX_Size }}
+        $RAM={{ VM_RAM }}
+        $CPU="{{ VM_CPU }}"
+        $NWAdapter="{{ VM_Switch }}"
+        $vLAN="{{ VM_vLANid }}"
+        $Path="{{ VM_VHDX_Disk }}:\Hyper-V\{{ VM_Name }}\Virtual Hard Disks\System.vhdx"
+        $ISOPath="{{ VM_ISO }}"
+        New-VM -Name $Name -Path 'C:\Hyper-V\' -MemoryStartupBytes $RAM -NewVHDPath $Path -NewVHDSizeBytes $VHDX -Generation 2
+        Add-VMDvdDrive -VMName $Name -Path $ISOPath
+        Set-VMProcessor $Name -Count $CPU
+        Get-VM $Name | Get-VMNetworkAdapter | Connect-VMNetworkAdapter -SwitchName $NWAdapter
+        Get-VM $Name | Get-VMNetworkAdapter | Set-VMNetworkAdapterVlan  -VlanId $vLAN -Access
 
     - name: Set boot order  
       ansible.windows.win_powershell:
-      script: |
-       $Name="{{ VM_Name }}" 
-       Set-VMFirmware $Name -BootOrder $(Get-VMDvdDrive -VMName "$Name"), $(Get-VMHardDiskDrive -VMName "$Name"), $(Get-VMNetworkAdapter -VMName "$Name")
+        script: |
+        $Name="{{ VM_Name }}" 
+        Set-VMFirmware $Name -BootOrder $(Get-VMDvdDrive -VMName "$Name"), $(Get-VMHardDiskDrive -VMName "$Name"), $(Get-VMNetworkAdapter -VMName "$Name")
