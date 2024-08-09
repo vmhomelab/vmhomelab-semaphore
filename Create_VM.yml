@@ -13,7 +13,7 @@
           $vLAN="{{ VM_vLANid }}"
           $Path="{{ VM_VHDX_Disk }}:\Virtual Hard Disks\{{ VM_Name }}\System.vhdx"
           $ISOPath="{{ VM_ISO }}"
-          New-VM -Name $Name -Path 'C:\Hyper-V\' -MemoryStartupBytes $RAM -NewVHDPath $Path -NewVHDSizeBytes $VHDX -Generation 2
+          New-VM -Name $Name -Path 'D:\Configuration Files\Virtual Machines' -MemoryStartupBytes $RAM -NewVHDPath $Path -NewVHDSizeBytes $VHDX -Generation 2
           Add-VMDvdDrive -VMName $Name -Path $ISOPath
           Set-VMProcessor $Name -Count $CPU
           Get-VM $Name | Get-VMNetworkAdapter | Connect-VMNetworkAdapter -SwitchName $NWAdapter
