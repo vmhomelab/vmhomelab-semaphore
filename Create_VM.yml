@@ -1,5 +1,5 @@
 - name: Create Virtual Machine
-  hosts: Hosts
+  hosts: hosts
 
   tasks:
     - name: Create Virutal Machine
