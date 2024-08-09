@@ -20,7 +20,7 @@
           Get-VM $Name | Get-VMNetworkAdapter | Set-VMNetworkAdapterVlan  -VlanId $vLAN -Access
 
     - name: Set boot order  
-      ansible.windows.win_powershell:
+      ansible.windows.win_shell:
         script: |
           $Name="{{ VM_Name }}" 
           Set-VMFirmware $Name -BootOrder $(Get-VMDvdDrive -VMName "$Name"), $(Get-VMHardDiskDrive -VMName "$Name"), $(Get-VMNetworkAdapter -VMName "$Name")
