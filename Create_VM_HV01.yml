@@ -11,7 +11,7 @@
         $NWAdapter="{{ VM_Switch }}"
         $vLAN="{{ VM_vLANid }}"
         $Path="D:\Virtual Hard Disk\{{ VM_Name }}\System.vhdx"
-        $ISOPath="{{ VM_ISO }}"
+        $ISOPath="C:\temp\en-us_windows_server_2022_final_image.iso"
         
         # Creating VM
         New-VM -Name $Name -Path 'D:\Configuration Files\Virtual Machines' -MemoryStartupBytes $RAM -NewVHDPath $Path -NewVHDSizeBytes $VHDX -Generation 2
