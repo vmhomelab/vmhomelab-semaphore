@@ -1,13 +1,16 @@
 - name: Domain Join
-  hosts: newVMs
+  hosts: hosts
 
   tasks:
     - name: Join a domain
       ansible.windows.win_domain_membership:
         dns_domain_name: "vmhomelab.local"
+        hostname: "{{ Server_Name }}"
         domain_admin_user: "administrator"
         domain_admin_password: "{{ Domain_Pwd }}"
         ou_path: "OU=Server,OU=vmhomelab,DC=vmhomelab,DC=local"
+        state: domain
+      register: domain_state
 
     - name: Reboot
       ansible.windows.win_shell: |
