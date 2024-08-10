@@ -2,6 +2,10 @@
   hosts: hosts
 
   tasks:
+    - name: Change the hostname to sample-hostname
+    ansible.windows.win_hostname:
+      name: "{{ Server_Name }}"
+    register: res
     - name: Join a domain
       ansible.windows.win_domain_membership:
         dns_domain_name: "vmhomelab.local"
@@ -12,17 +16,9 @@
         state: domain
       register: domain_state
 
-    - name: Reboot
-      ansible.windows.win_shell: |
-        $VMName = "{{ Server_Name }}"
-        try {
-          # Reboot the computer
-          Restart-VM -Name $VMName -Force -ErrorAction Stop
-          Write-Host "The VM '$VMName' is being rebooted." -ForegroundColor Green
-        } catch {
-            # Handle any errors that occur during the reboot process
-            Write-Host "Failed to reboot the computer '$VMName'. Error: $($_.Exception.Message)" -ForegroundColor Red
-        }
+    - name: Reboot host after domain join
+      ansible.windows.win_reboot:
+      when: domain_state.reboot_required
 
     - name: Wait until the VM responds to ping 5 times
       ansible.windows.win_shell: |
