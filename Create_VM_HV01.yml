@@ -55,10 +55,11 @@
 
     - name: Execute PowerShell script after VM is responding
       ansible.windows.win_shell: |
-        Write-Host "Executing PowerShell script after successful ping..."
+        Write-Host 'Executing PowerShell script after successful ping...'
+        
         # Define your bot token and chat ID
-        $BotToken = "YOUR_BOT_TOKEN"
-        $ChatID = "YOUR_CHAT_ID"
+        $BotToken = '7064185524:AAEDGYXhe9S4EUDXeocZsSAm3kZLiHgm3DQ'
+        $ChatID = '1752571361'
         
         # Get the last created VM
         $lastVM = Get-VM | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
@@ -86,7 +87,7 @@
             try {
                 $response = Invoke-RestMethod -Uri $apiURL -Method POST -ContentType "application/json" -Body ($payload | ConvertTo-Json)
                 if ($response.ok) {
-                    Write-Output "Message sent successfully!"
+                    Write-Output 'Message sent successfully!'
                 } else {
                     Write-Output "Failed to send message. Response: $($response | ConvertTo-Json)"
                 }
@@ -94,7 +95,7 @@
                 Write-Output "Error: $_"
             }
         } else {
-            Write-Output "No VMs found on this Hyper-V host."
+            Write-Output 'No VMs found on this Hyper-V host.'
         }
-        Write-Host "PowerShell script executed."
+        Write-Host 'PowerShell script executed.'
       when: ping_result is success
