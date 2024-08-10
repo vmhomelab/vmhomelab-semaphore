@@ -1,12 +1,18 @@
 - name: Domain Join
-  hosts: newVMs
+  hosts: hosts
 
   tasks:
 
     - name: Join a domain
       ansible.windows.win_shell: |
+        $VMName = "{{ Server_Name }}"
         $domain = "vmhomelab.local"
-        $password = "G32SU9ESwRqTI4FX1f3i" | ConvertTo-SecureString -asPlainText -Force
+        $password = "{{ Password }}" | ConvertTo-SecureString -asPlainText -Force
         $username = "$domain\administrator"
         $credential = New-Object System.Management.Automation.PSCredential($username,$password)
-        Add-Computer -DomainName $domain -Credential $credential -OUPath "OU=Server,OU=vmhomelab,DC=vmhomelab,DC=local"
+        $domjoin = {
+            Add-Computer -DomainName $domain -Credential $credential -OUPath "OU=Server,OU=vmhomelab,DC=vmhomelab,DC=local"
+        }
+        Invoke-Command -ComputerName $VMName -ScriptBlock $domjoin
+
+    - include: reboot_pc.yml
