@@ -5,8 +5,8 @@
   tasks:
     - name: Rename VM
       ansible.windows.win_shell: |
-        $VMName = "VMH-AutomatedVM-SRV"
-        $NewComputerName = "VMH-AutomatedVM-SRV"
+        $VMName = "{{ VM_Name }}"
+        $NewComputerName = "{{ NewComputerName }}"
         $username = "svc_ansible"
         $password = "{{ Password }}"
         $userPassword = ConvertTo-SecureString -String $password -AsPlainText -Force
