@@ -1,0 +1,12 @@
+- name: Create_Snapshots
+  hosts: newVMs
+
+  tasks:
+
+    - name: Join a domain
+      ansible.windows.win_shell: |
+        $domain = "vmhomelab.local"
+        $password = "G32SU9ESwRqTI4FX1f3i" | ConvertTo-SecureString -asPlainText -Force
+        $username = "$domain\administrator"
+        $credential = New-Object System.Management.Automation.PSCredential($username,$password)
+        Add-Computer -DomainName $domain -Credential $credential -OUPath "OU=Server,OU=vmhomelab,DC=vmhomelab,DC=local"
