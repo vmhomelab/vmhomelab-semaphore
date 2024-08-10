@@ -13,4 +13,5 @@
       } catch {
           # Handle any errors that occur during the reboot process
           Write-Host "Failed to reboot the computer '$ComputerName'. Error: $($_.Exception.Message)" -ForegroundColor Red
+      }
       
