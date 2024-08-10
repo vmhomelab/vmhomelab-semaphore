@@ -1,0 +1,27 @@
+- name: Reboot VM
+  hosts: hosts
+  remote_user: svc_ansible
+  
+  tasks:
+    - name: Rename VM
+      ansible.windows.win_shell: |
+        # PowerShell Script to Change Computer Hostname
+
+        # Specify the new hostname
+        $newHostname = "{{ NewComputerName }}"
+
+        # Get the current hostname
+        $currentHostname = (Get-WmiObject Win32_ComputerSystem).Name
+        Write-Host "Current Hostname: $currentHostname"
+
+        # Change the hostname
+        try {
+            Rename-Computer -NewName $newHostname -Force
+            Write-Host "Hostname successfully changed to $newHostname"
+        } catch {
+            Write-Host "Error changing hostname: $_"
+        }
+
+        # Restart the computer to apply changes
+        Write-Host "Restarting the computer to apply the hostname change..."
+        Restart-Computer -Force 
