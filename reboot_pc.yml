@@ -1,11 +1,11 @@
-- name: Reboot NSP-DC01-SRV
+- name: Reboot VM
   hosts: hosts
   remote_user: svc_ansible
   
   tasks:
   - name: Reboot
     ansible.windows.win_shell: |
-      $ComputerName = {{ Server_Name }}
+      $ComputerName = "{{ Server_Name }}"
       try {
         # Reboot the computer
         Restart-Computer -ComputerName $ComputerName -Force -ErrorAction Stop
