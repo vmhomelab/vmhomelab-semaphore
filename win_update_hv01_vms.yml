@@ -1,5 +1,5 @@
 - name: Default Setup
-  hosts: windows
+  hosts: hv01vms
   
   tasks:
     - name: Install all security, critical, and rollup updates without a scheduled task
