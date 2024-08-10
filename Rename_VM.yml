@@ -5,7 +5,9 @@
   tasks:
     - name: Rename VM
       ansible.windows.win_shell: |
+        $VMName = "{{ VM_Name }}"
+        $NewComputerName = "{{ NewComputerName }}"
         $username = "svc_ansible"
         $password = "rDKx.sv5Yz&NK~x&ziuz9KyT`%xgPS"
         $credential = New-Object System.Management.Automation.PSCredential($username, $password)
-        Invoke-Command -VMName "{{VM_Name}}" -Credential $credential -ScriptBlock { Rename-Computer -NewName "{{NewComputerName}}" }
+        Invoke-Command -VMName $VMName -Credential $credential -ScriptBlock { Rename-Computer -NewName $NewComputerName }
