@@ -1,9 +1,33 @@
 - name: My first play
-  hosts: linux
-  tasks:
-   - name: Ping my hosts
-     ansible.builtin.ping:
+  hosts: hv01
 
-   - name: Print message
-     ansible.builtin.debug:
-      msg: Hello world
+
+  tasks:
+    - name: Wait until the VM responds to ping 5 times
+      ansible.windows.win_shell: |
+        $Name="vmh-tools01-srv"
+        $vmipv4adress = Get-VM -$Name | Get-VMNetworkAdapter | Select-Object -ExpandProperty IPAddresses
+        $PingCount = 0
+        while ($PingCount -lt 5) {
+            if ($vmipv4adress.Count -gt 0) {
+              # Extract the first IP address from the list
+              $ipAddress = $vmipv4adress[0]
+
+              # Print the IP address (for verification)
+              Write-Host "IP Address: $ipAddress"
+
+              # Ping the IP address
+              Test-Connection -ComputerName $ipAddress -Count 4
+          } else {
+              Write-Host "No IP addresses found for the VM."
+          }
+            Start-Sleep -Seconds 5
+        }
+      register: ping_result
+
+    - name: Execute PowerShell script after VM is responding
+      ansible.windows.win_shell: |
+        Write-Host 'Executing PowerShell script after successful ping...'
+        & "C:\temp\Send_telegram_Message_After_VM_is_ready.ps1"
+        Write-Host 'PowerShell script executed.'
+      when: ping_result is success
