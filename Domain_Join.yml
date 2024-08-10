@@ -6,7 +6,7 @@
       ansible.windows.win_domain_membership:
         dns_domain_name: "vmhomelab.local"
         domain_admin_user: "administrator"
-        domain_admin_password: "{{ Password }}"
+        domain_admin_password: "{{ Domain_Pwd }}"
         ou_path: "OU=Server,OU=vmhomelab,DC=vmhomelab,DC=local"
 
     - name: Reboot
