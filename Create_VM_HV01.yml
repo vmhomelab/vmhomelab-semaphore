@@ -58,29 +58,22 @@
         # Define your bot token and chat ID
         $BotToken = "7064185524:AAEDGYXhe9S4EUDXeocZsSAm3kZLiHgm3DQ"
         $ChatID = "1752571361"
-
         # Get the last created VM
         $lastVM = Get-VM | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
-
         # Get the Hyper-V server's hostname
         $HyperVHostName = (Get-ComputerInfo).CsName
-
         if ($lastVM -ne $null) {
             $VMName = $lastVM.Name
             $VMState = $lastVM.State
-
             # Construct the message
             $Message = "The VM '$VMName' is up and running with the state: $VMState on Hyper-V host: $HyperVHostName."
-
             # Construct the API URL
             $apiURL = "https://api.telegram.org/bot$BotToken/sendMessage"
-
             # Prepare the payload
             $payload = @{
                 chat_id = $ChatID
                 text    = $Message
             }
-
             # Send the message using Invoke-RestMethod
             try {
                 $response = Invoke-RestMethod -Uri $apiURL -Method POST -ContentType "application/json" -Body ($payload | ConvertTo-Json)
@@ -95,6 +88,5 @@
         } else {
             Write-Output "No VMs found on this Hyper-V host."
         }
-
         Write-Host "PowerShell script executed."
       when: ping_result is success
