@@ -4,4 +4,13 @@
   
   tasks:
   - name: Reboot
-    ansible.windows.win_reboot:
+    ansible.windows.win_shell: |
+      $ComputerName = {{ Server_Name }}
+      try {
+        # Reboot the computer
+        Restart-Computer -ComputerName $ComputerName -Force -ErrorAction Stop
+        Write-Host "The computer '$ComputerName' is being rebooted." -ForegroundColor Green
+      } catch {
+          # Handle any errors that occur during the reboot process
+          Write-Host "Failed to reboot the computer '$ComputerName'. Error: $($_.Exception.Message)" -ForegroundColor Red
+      
