@@ -3,9 +3,9 @@
 
   tasks:
     - name: Change the hostname to sample-hostname
-    ansible.windows.win_hostname:
-      name: "{{ Server_Name }}"
-    register: res
+      ansible.windows.win_hostname:
+        name: "{{ Server_Name }}"
+      register: res
     - name: Join a domain
       ansible.windows.win_domain_membership:
         dns_domain_name: "vmhomelab.local"
