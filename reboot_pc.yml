@@ -3,15 +3,45 @@
   remote_user: svc_ansible
   
   tasks:
-  - name: Reboot
-    ansible.windows.win_shell: |
-      $VMName = "{{ Server_Name }}"
-      try {
-        # Reboot the computer
-        Restart-VM -Name $VMName -Force -ErrorAction Stop
-        Write-Host "The VM '$VMName' is being rebooted." -ForegroundColor Green
-      } catch {
-          # Handle any errors that occur during the reboot process
-          Write-Host "Failed to reboot the computer '$VMName'. Error: $($_.Exception.Message)" -ForegroundColor Red
-      }
-      
+    - name: Reboot
+      ansible.windows.win_shell: |
+        $VMName = "{{ Server_Name }}"
+        try {
+          # Reboot the computer
+          Restart-VM -Name $VMName -Force -ErrorAction Stop
+          Write-Host "The VM '$VMName' is being rebooted." -ForegroundColor Green
+        } catch {
+            # Handle any errors that occur during the reboot process
+            Write-Host "Failed to reboot the computer '$VMName'. Error: $($_.Exception.Message)" -ForegroundColor Red
+        }
+
+    - name: Wait until the VM responds to ping 5 times
+      ansible.windows.win_shell: |
+        $PingCount = 0
+
+        $VMName = "{{ Server_Name }}"
+
+        # Start the ping test
+        while ($PingCount -lt 5) {
+            
+            Write-Host "Pinging Server: $VMName"
+
+            # Ping the IP address
+            $pingResult = Test-Connection -ComputerName $VMName -Count 1 -Quiet
+            if ($pingResult) {
+                $PingCount++
+                Write-Host "$VMName responded to ping ($PingCount/5)"
+            } else {
+                $PingCount = 0
+                Write-Host "$VMName did not respond, resetting count"
+            }
+            Start-Sleep -Seconds 5
+        }
+      register: ping_result
+
+    - name: Execute PowerShell script after VM is responding
+      ansible.windows.win_shell: |
+        Write-Host 'Executing PowerShell script after successful ping...'
+        & "C:\temp\Send_Telegram_Message_After_VM_Reboot.ps1"
+        Write-Host 'PowerShell script executed.'
+      when: ping_result is success      
