@@ -1,4 +1,4 @@
-- name: Create_Snapshots
+- name: Domain Join
   hosts: newVMs
 
   tasks:
