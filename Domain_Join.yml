@@ -1,5 +1,5 @@
 - name: Domain Join
-  hosts: { Server_Name }
+  hosts: newVMs
 
   tasks:
     - name: Join a domain
