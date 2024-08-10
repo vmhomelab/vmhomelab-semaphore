@@ -42,29 +42,39 @@
         # Get the most recently created VM and extract the Name property
         $Name = Get-VM | Sort-Object -Property CreationTime -Descending | Select-Object -First 1 | Select-Object -ExpandProperty Name
 
-        # Retrieve the IP addresses associated with the VM
-        $vmipv4adress = (Get-VM -Name $Name | Get-VMNetworkAdapter).IPAddresses
+        $vmipv4address = @()
+
+        # Loop until a valid IPv4 address is found
+        while ($vmipv4address.Count -eq 0) {
+            # Retrieve the IP addresses associated with the VM
+            $vmipv4address = (Get-VM -Name $Name | Get-VMNetworkAdapter).IPAddresses | Where-Object { $_ -match '^(\d{1,3}\.){3}\d{1,3}$' }
+            
+            if ($vmipv4address.Count -eq 0) {
+                Write-Host "No valid IPv4 addresses found. Retrying in 5 seconds..."
+                Start-Sleep -Seconds 5
+            } else {
+                Write-Host "Valid IPv4 address found: $($vmipv4address[0])"
+            }
+        }
 
         $PingCount = 0
+
+        # Extract the first valid IPv4 address
+        $ipAddress = $vmipv4address
+
+        # Start the ping test
         while ($PingCount -lt 5) {
-            if ($vmipv4adress.Count -gt 0) {
-                # Extract the first IP address from the list
-                $ipAddress = $vmipv4adress[0]
+            # Print the IP address (for verification)
+            Write-Host "Pinging IP Address: $ipAddress"
 
-                # Print the IP address (for verification)
-                Write-Host "IP Address: $ipAddress"
-
-                # Ping the IP address
-                $pingResult = Test-Connection -ComputerName $ipAddress -Count 1 -Quiet
-                if ($pingResult) {
-                    $PingCount++
-                    Write-Host "$ipAddress responded to ping ($PingCount/5)"
-                } else {
-                    $PingCount = 0
-                    Write-Host "$ipAddress did not respond, resetting count"
-                }
+            # Ping the IP address
+            $pingResult = Test-Connection -ComputerName $ipAddress -Count 1 -Quiet
+            if ($pingResult) {
+                $PingCount++
+                Write-Host "$ipAddress responded to ping ($PingCount/5)"
             } else {
-                Write-Host "No IP addresses found for the VM."
+                $PingCount = 0
+                Write-Host "$ipAddress did not respond, resetting count"
             }
             Start-Sleep -Seconds 5
         }
