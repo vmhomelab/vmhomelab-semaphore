@@ -5,22 +5,29 @@
   tasks:
     - name: Wait until the VM responds to ping 5 times
       ansible.windows.win_shell: |
-        $Name="vmh-tools01-srv"
-        $vmipv4adress = Get-VM -$Name | Get-VMNetworkAdapter | Select-Object -ExpandProperty IPAddresses
+        $Name = "vmh-tools01-srv"
+        $vmipv4adress = (Get-VM -Name $Name | Get-VMNetworkAdapter).IPAddresses
         $PingCount = 0
         while ($PingCount -lt 5) {
             if ($vmipv4adress.Count -gt 0) {
-              # Extract the first IP address from the list
-              $ipAddress = $vmipv4adress[0]
+                # Extract the first IP address from the list
+                $ipAddress = $vmipv4adress[0]
 
-              # Print the IP address (for verification)
-              Write-Host "IP Address: $ipAddress"
+                # Print the IP address (for verification)
+                Write-Host "IP Address: $ipAddress"
 
-              # Ping the IP address
-              Test-Connection -ComputerName $ipAddress -Count 4
-          } else {
-              Write-Host "No IP addresses found for the VM."
-          }
+                # Ping the IP address
+                $pingResult = Test-Connection -ComputerName $ipAddress -Count 1 -Quiet
+                if ($pingResult) {
+                    $PingCount++
+                    Write-Host "$ipAddress responded to ping ($PingCount/5)"
+                } else {
+                    $PingCount = 0
+                    Write-Host "$ipAddress did not respond, resetting count"
+                }
+            } else {
+                Write-Host "No IP addresses found for the VM."
+            }
             Start-Sleep -Seconds 5
         }
       register: ping_result
