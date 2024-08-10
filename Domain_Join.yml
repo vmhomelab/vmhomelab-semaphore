@@ -9,10 +9,11 @@
         $password = ConvertTo-SecureString "{{ Password }}" -AsPlainText -Force
         $username = "$domain\administrator"
         $credential = New-Object System.Management.Automation.PSCredential($username,$password)
-        $domjoin = {
+        
+        Invoke-Command -ComputerName $VMName -ScriptBlock {
+            param($credential, $domain)
             Add-Computer -DomainName $domain -Credential $credential -OUPath "OU=Server,OU=vmhomelab,DC=vmhomelab,DC=local"
-        }
-        Invoke-Command -ComputerName $VMName -ScriptBlock $domjoin
+        } -ArgumentList $credential, $domain
 
     - name: Reboot
       ansible.windows.win_shell: |
