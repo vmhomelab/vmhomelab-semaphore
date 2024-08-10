@@ -1,5 +1,5 @@
 - name: Domain Join
-  hosts: {{ Server_Name }}
+  hosts: { Server_Name }
 
   tasks:
     - name: Join a domain
