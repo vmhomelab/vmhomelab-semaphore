@@ -39,8 +39,12 @@
 
     - name: Wait until the VM responds to ping 5 times
       ansible.windows.win_shell: |
-        $Name="{{ VM_Name }}"
+        # Get the most recently created VM and extract the Name property
+        $Name = Get-VM | Sort-Object -Property CreationTime -Descending | Select-Object -First 1 | Select-Object -ExpandProperty Name
+
+        # Retrieve the IP addresses associated with the VM
         $vmipv4adress = (Get-VM -Name $Name | Get-VMNetworkAdapter).IPAddresses
+
         $PingCount = 0
         while ($PingCount -lt 5) {
             if ($vmipv4adress.Count -gt 0) {
